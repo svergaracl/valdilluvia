@@ -6,6 +6,30 @@
   <title>Sitio simple — Loop de video/GIF</title>
   <link rel="stylesheet" href="styles.css.css" />
 </head>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const video = document.getElementById('player');
+  const btn = document.getElementById('playBtn');
+  if (!video || !btn) return console.error('Falta #player o #playBtn');
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    video.muted = false; // quitar silencio
+    try {
+      await video.play();
+      btn.style.opacity = '0';
+      btn.style.pointerEvents = 'none';
+      btn.setAttribute('aria-hidden', 'true');
+    } catch (err) {
+      console.error('play() falló:', err);
+      video.controls = true; // fallback para que el usuario reproduzca manualmente
+      btn.disabled = false;
+      alert('No se pudo reproducir con audio automáticamente. Revisa la consola.');
+    }
+  });
+});
+</script>
+  
 <body>
   <main class="container">
     <h1>Simplemente Valdilluvia....</h1>
@@ -18,6 +42,7 @@
     class="media__video"
     loop
     playsinline
+    controls
     poster="assets/poster.jpg"
     aria-label="Vídeo en bucle que muestra una animación decorativa"
   >
